@@ -6,11 +6,65 @@
   <title>カレンダー</title>
 </head>
 <body>
+  <div id="app">
+
+  </div>
   <!-- 先月・今月・来月のカレンダー作成する -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
-    
+		//基本データ
+		// const now = new Date();
+		// const nowYear = now.getFullYear();
+		// const nowMonth = now.getMonth() + 1;
+		// const nowdate = now.getDate();
+		// const nowOfWeek = now.getDay();
+		// const nowOfWeekStr = ['日','月','火','水','木','金','土'];
+		// let firstDayWeek = new Date(`${nowYear}/${nowMonth}/1`);
+		// firstDayWeek = nowOfWeekStr[firstDayWeek.getDay()];//初日の曜日
+		// const lastDate = new Date(nowYear,nowMonth,0);//月末の日付
+// 		const firstDayWeek2 = new Date(nowYear,nowMonth - 1 ,1).getDay();
+// console.log(firstDayWeek2);
+    const calendar = new Vue({
+			data:function(){
+				return {
+					now:'',
+					nowYear:'',
+					nowMonth:'',
+					nowMonthStr:'',
+					nowdate:'',
+					nowOfWeek:'',
+					nowOfWeekStr:'',
+					firstDayWeek:''
+				}
+			},
+			created: function(){
+				this.now = new Date();
+				this.nowYear = this.now.getFullYear();
+				this.nowMonth = this.now.getMonth(),//ゼロから数える今月の月
+				this.nowMonthStr = this.nowMonth + 1,
+				this.nowdate = this.now.getDate(),
+				this.nowOfWeek = this.now.getDay(),
+				this.nowOfWeekStr = ['日','月','火','水','木','金','土'],
+				this.firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay()
+			},
+			computed: {
+				calendarMake:function(){
+					const firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay();//月初の曜日
+					const lastDate = new Date(this.nowYear,this.nowMonth,0);//月末の日付
 
+				}
+			},
+			template:
+			`<table>
+				<tr>
+				</tr>
+				<tr>
+				<td>{{nowOfWeek}}</td>
+				</tr>
+			</table>
+			`
+    });
+    calendar.$mount('#app');
   </script>
 </body>
 </html>
