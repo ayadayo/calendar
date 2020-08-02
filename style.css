@@ -1,0 +1,31 @@
+#app * {
+  box-sizing: border-box;
+}
+
+.c-calendar {
+  width: 700px;
+}
+
+.c-calendar__heading {
+  font-size: 18px;
+}
+
+.c-calendar__weeks {
+  display: flex;
+  background: #ddd;
+  padding: 3px;
+}
+
+.c-calendar__item {
+  flex: 0 1 calc(700px/7);
+  text-align: center;
+}
+
+.c-calendar__item.-is-today {
+  color: red;
+}
+
+.c-calendar-module {
+  display: flex;
+  flex-wrap: wrap;
+}

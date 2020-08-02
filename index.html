@@ -3,27 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>カレンダー</title>
+	<title>カレンダー</title>
+	<link rel="stylesheet" href="style.min.css">
 </head>
 <body>
   <div id="app">
-
+		<div class="c-calendar">
+			<h1 class="c-calendar__heading">{{nowYear}}年{{nowMonthStr}}月</h1>
+			<div class="c-calendar__weeks"><div v-for="week in nowOfWeekStr" class="c-calendar__item">{{week}}</div></div>
+			<div class="c-calendar-module">
+				<div v-for="day in calendarDate" class="c-calendar__item" :class="today(day)">{{day}}</div>
+			</div>
+		</div>
   </div>
-  <!-- 先月・今月・来月のカレンダー作成する -->
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
-		//基本データ
-		// const now = new Date();
-		// const nowYear = now.getFullYear();
-		// const nowMonth = now.getMonth() + 1;
-		// const nowdate = now.getDate();
-		// const nowOfWeek = now.getDay();
-		// const nowOfWeekStr = ['日','月','火','水','木','金','土'];
-		// let firstDayWeek = new Date(`${nowYear}/${nowMonth}/1`);
-		// firstDayWeek = nowOfWeekStr[firstDayWeek.getDay()];//初日の曜日
-		// const lastDate = new Date(nowYear,nowMonth,0);//月末の日付
-// 		const firstDayWeek2 = new Date(nowYear,nowMonth - 1 ,1).getDay();
-// console.log(firstDayWeek2);
     const calendar = new Vue({
 			data:function(){
 				return {
@@ -33,8 +27,9 @@
 					nowMonthStr:'',
 					nowdate:'',
 					nowOfWeek:'',
-					nowOfWeekStr:'',
-					firstDayWeek:''
+					nowOfWeekStr:['月','火','水','木','金','土','日'],
+					firstDayWeek:'',
+					isToday:'-is-today'
 				}
 			},
 			created: function(){
@@ -44,27 +39,32 @@
 				this.nowMonthStr = this.nowMonth + 1,
 				this.nowdate = this.now.getDate(),
 				this.nowOfWeek = this.now.getDay(),
-				this.nowOfWeekStr = ['日','月','火','水','木','金','土'],
 				this.firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay()
 			},
 			computed: {
-				calendarMake:function(){
+				calendarDate:function(){
 					const firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay();//月初の曜日
-					const lastDate = new Date(this.nowYear,this.nowMonth,0);//月末の日付
-
+					const lastDate = new Date(this.nowYear,this.nowMonth,0).getDate();//月末の日付
+					const space = firstDayWeek === 0 ? 6:firstDayWeek - 1;
+					const spaceNumber = [...Array(space)].map(function(_,i){
+						return '';
+					});
+					const daysAllNumber = [...Array(lastDate)].map(function(_,i){
+						return i + 1;
+					});
+					const totalDays = [...spaceNumber,...daysAllNumber];
+					return totalDays;
 				}
 			},
-			template:
-			`<table>
-				<tr>
-				</tr>
-				<tr>
-				<td>{{nowOfWeek}}</td>
-				</tr>
-			</table>
-			`
+			methods: {
+				today:function(day){
+					if(day === this.nowdate) {
+						return this.isToday;
+					}
+				}
+			}
     });
     calendar.$mount('#app');
-  </script>
+	</script>
 </body>
 </html>
