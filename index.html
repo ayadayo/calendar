@@ -9,7 +9,9 @@
 <body>
   <div id="app">
 		<div class="c-calendar">
-			<h1 class="c-calendar__heading">{{nowYear}}年{{nowMonthStr}}月</h1>
+			<button @click="prevMonth()">＜</button>
+			<button class="c-calendar__heading">{{nowYear}}年{{nowMonth}}月</button>
+			<button @click="nextMonth()">＞</button>
 			<div class="c-calendar__weeks"><div v-for="week in nowOfWeekStr" class="c-calendar__item">{{week}}</div></div>
 			<div class="c-calendar-module">
 				<div v-for="day in calendarDate" class="c-calendar__item" :class="today(day)">{{day}}</div>
@@ -35,15 +37,30 @@
 			created: function(){
 				this.now = new Date();
 				this.nowYear = this.now.getFullYear();
-				this.nowMonth = this.now.getMonth(),//ゼロから数える今月の月
-				this.nowMonthStr = this.nowMonth + 1,
+				this.nowMonth = this.now.getMonth() + 1,//ゼロから数える今月の月
 				this.nowdate = this.now.getDate(),
 				this.nowOfWeek = this.now.getDay(),
 				this.firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay()
 			},
+			methods: {
+				//今日にclass付与
+				today:function(day){
+					if(day === this.nowdate) {
+						return this.isToday;
+					}
+				},
+				nextMonth:function(){
+					this.nowMonth = this.nowMonth != 12 ? this.nowMonth + 1 : 1
+					this.nowYear = this.nowMonth != 1 ? this.nowYear : this.nowYear + 1
+				},
+				prevMonth:function(){
+					this.nowMonth = this.nowMonth != 1 ? this.nowMonth - 1 : 12,
+					this.nowYear = this.nowMonth != 12 ? this.nowYear : this.nowYear - 1
+				}
+			},
 			computed: {
 				calendarDate:function(){
-					const firstDayWeek = new Date(this.nowYear,this.nowMonth ,1).getDay();//月初の曜日
+					const firstDayWeek = new Date(this.nowYear,this.nowMonth - 1 ,1).getDay();//月初の曜日
 					const lastDate = new Date(this.nowYear,this.nowMonth,0).getDate();//月末の日付
 					const space = firstDayWeek === 0 ? 6:firstDayWeek - 1;
 					const spaceNumber = [...Array(space)].map(function(_,i){
@@ -54,13 +71,6 @@
 					});
 					const totalDays = [...spaceNumber,...daysAllNumber];
 					return totalDays;
-				}
-			},
-			methods: {
-				today:function(day){
-					if(day === this.nowdate) {
-						return this.isToday;
-					}
 				}
 			}
     });
